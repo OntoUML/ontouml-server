@@ -6,6 +6,7 @@ import errorRouter from '@routes/error';
 import { API_VERSION } from '@configs/index';
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.set('json spaces', 2);
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,6 +17,6 @@ app.use(API_VERSION, ontoumlRoutes);
 app.use(notFoundRouter);
 app.use(errorRouter);
 
-app.listen(8888);
+app.listen(port);
 
-console.log('API is running on port 8888');
+console.log(`API is running on port ${port}`);
