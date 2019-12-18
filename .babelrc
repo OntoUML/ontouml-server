@@ -1,4 +1,16 @@
 {
   "presets": ["@babel/preset-env", "@babel/preset-typescript"],
-  "plugins": ["@babel/plugin-transform-runtime"]
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    [
+      "module-resolver", {
+        "alias": {
+          "@configs": "./src/configs",
+          "@error": "./src/error",
+          "@routes": "./src/routes",
+          "@utils": "./src/utils"
+        }
+      }
+    ]
+  ]
 }

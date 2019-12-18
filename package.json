@@ -8,12 +8,13 @@
   },
   "main": "build/src/index.js",
   "scripts": {
-    "start": "node index.ts",
+    "start": "node dist/index.js",
     "start:dev": "npm-run-all -p format:watch start:watch",
     "start:watch": "nodemon index.ts",
     "format:watch": "onchange '**/*.ts' -- prettier --write {{changed}}",
     "clean": "rimraf coverage build tmp",
-    "build": "TS_NODE_FILES=true tsc -p tsconfig.release.json",
+    "build": "rm -rf ./dist && npm run build:js",
+    "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
     "build:watch": "TS_NODE_FILES=true tsc -w -p tsconfig.release.json",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "test": "jest --coverage",
@@ -45,6 +46,7 @@
     "uniqid": "^5.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.5",
     "@babel/core": "^7.6.4",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
@@ -54,6 +56,7 @@
     "@types/node": "^10.14.17",
     "apidoc": "^0.19.0",
     "babel-jest": "^24.9.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "dotenv": "^8.2.0",
     "grpc_tools_node_protoc_ts": "^2.5.5",
     "husky": "^3.1.0",
