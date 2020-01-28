@@ -1,0 +1,31 @@
+  
+name: remote ssh command
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_ONTOUML_SERVER_HOST }}
+        username: ${{ secrets.SSH_ONTOUML_SERVER_USER }}
+        key: ${{ secrets.SSH_ONTOUML_SERVER_KEY }}
+        script: |
+            if [ -d ontouml-server/ ] ; then sudo rm ontouml-server/ -R; echo "Folder deleted" ; else echo "No such folder as /ontouml-server" ; fi
+            git clone https://github.com/OntoUML/ontouml-server.git
+            cd ~/ontouml-server/
+            sudo docker-compose down
+            sudo docker-compose build
+            sudo docker-compose up -d
+            exit
