@@ -19,9 +19,6 @@ dist/
 # JetBrains IDEs
 .idea/
 
-# Env
-.env
-
 # Optional npm cache directory
 .npm
 
