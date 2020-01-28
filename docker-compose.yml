@@ -1,0 +1,10 @@
+# This file configures the destination-data-server routing the application's port to the one that should be exposed by the server
+version: "2"
+services:
+  ontouml-server:
+    container_name: ontouml-server
+    env_file: .env
+    build: .
+    restart: always
+    ports:
+      - "${ONTOUML_SERVER_PORT}:${ONTOUML_SERVER_PORT}"
