@@ -75,6 +75,7 @@ router.post(
     next: express.NextFunction,
   ) => {
     let modelManager: ModelManager;
+    let verification: OntoUML2Verification;
     let service: OntoUML2GUFO;
 
     try {
@@ -82,6 +83,10 @@ router.post(
       const options = req.body.options;
 
       modelManager = new ModelManager(model);
+
+      verification = new OntoUML2Verification(modelManager);
+      const issues: VerificationIssue[] = await verification.run();
+
       service = new OntoUML2GUFO(modelManager);
       const output = await service.transformOntoUML2GUFO(options);
 
