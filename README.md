@@ -182,7 +182,15 @@ Unsuccessful requests may return one of the following responses:
 
  - **Body does not conform to the request specification**
 
+ ```HTTP
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
 
+{
+  "status": 400,
+  "message": "Malformed request"
+}
+```
 
  - **`model` does not conform to `ontouml-schema` serialization**
 
@@ -199,9 +207,51 @@ Content-Type: application/json
 
  - **`model` has issues of severity `ERROR` contains**
 
+ ```HTTP
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "status": 400,
+  "message": "Unable to transform model containing errors",
+  "errors": [
+    {
+      "code": "CLASS_INVALID_ONTOUML_STEREOTYPE",
+      "title": "No valid OntoUML stereotype.",
+      "description": "The class Person must have a unique OntoUML stereotype.",
+      "source": {
+        "type": "Class",
+        "id": "qJdeWA6AUB0UtAWm",
+        "name": "Person",
+        "description": null,
+        "properties": null,
+        "literals": null,
+        "propertyAssignments": null,
+        "stereotypes": [
+          "invalid"
+        ],
+        "isAbstract": false,
+        "isDerived": false
+      },
+      "context": null,
+      "severity": "ERROR",
+      "alternatives": [
+        {
+          "code": "REPLACE_ONTOUML_CLASS_STEREOTYPE",
+          "title": "Replace element's stereotypes.",
+          "description": "Apply to Person a unique stereotype from the set {kind, quantity, collective, subkind, role, phase, category, mixin, roleMixin, phaseMixin, relator, mode, quality, type, event, historicalRole, datatype, enumeration}.",
+          "elements": null
+        }
+      ]
+    }
+  ]
+}
+```
+
+
  - **Internal Server Error**
 
- ```HTTP
+```HTTP
 HTTP/1.1 500 Internal Server Error
 ```
 

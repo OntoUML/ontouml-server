@@ -10,23 +10,6 @@ import {
 
 const router = express.Router();
 
-/**
- * @api {post} /verification 1. Verification
- * @apiVersion 0.1.0
- * @apiName Verification
- * @apiGroup OntoUML
- * @apiDescription Syntax verification for ontouml models
- *
- * @apiExample {curl} curl
- *   curl https://api.ontouml.org/v1/verification
- *
- * @apiExample {node} node
- *   const { OntoUMLModel } = require('ontouml-js');
- *
- *   const model = new OntoUMLModel(jsonModel);
- *   model.verify();
- *
- */
 router.post(
   '/verify',
   async (
@@ -36,33 +19,73 @@ router.post(
   ) => {
     let modelManager: ModelManager;
     let verification: OntoUML2Verification;
+    let issues: VerificationIssue[];
+    let issuesString: string;
 
     try {
       modelManager = new ModelManager(req.body);
+    } catch (deserializationError) {
+      let status: number = 500;
+      let message: string;
+      let errors: any;
+
+      if (deserializationError.message === 'Invalid model input.') {
+        status = 400;
+        message = deserializationError.message;
+        errors = deserializationError.errors;
+      } else {
+        status = 500;
+        message = 'Model manipulation error';
+        errors = deserializationError;
+      }
+
+      res.status(status);
+      res.json({
+        status: status,
+        message: message,
+        errors: errors,
+      });
+      return;
+    }
+
+    try {
       verification = new OntoUML2Verification(modelManager);
-      const issues: VerificationIssue[] = await verification.run();
+      issues = await verification.run();
+      issues = JSON.parse(JSON.stringify(issues, replacer));
+    } catch (verificationError) {
+      let status: number = 500;
+      let message: string = 'Model verification error';
+      let errors: any = verificationError;
 
-      // console.log(issues);
+      res.status(status);
+      res.json({
+        status: status,
+        message: message,
+        errors: errors,
+      });
+      return;
+    }
 
+    try {
       if (issues && issues.length > 0) {
         res.status(200);
-        res.json(JSON.parse(JSON.stringify(issues, replacer)));
+        res.json(issues);
       } else {
         res.status(200);
         res.json([]);
       }
-    } catch (exception) {
-      if (exception.message === 'Invalid model input.') {
-        res.status(400);
-        res.json({
-          status: '400',
-          message: exception.message,
-          errors: exception.errors,
-        });
-      } else {
-        res.status(500).send();
-        console.trace(exception);
-      }
+    } catch (responseError) {
+      let status: number = 500;
+      let message: string = 'Response error';
+      let errors: any = responseError;
+
+      res.status(status);
+      res.json({
+        status: status,
+        message: message,
+        errors: errors,
+      });
+      return;
     }
   },
 );
@@ -78,15 +101,83 @@ router.post(
     let verification: OntoUML2Verification;
     let service: OntoUML2GUFO;
 
+    if (
+      !req.body ||
+      !req.body.model ||
+      !req.body.options ||
+      !req.body.options.baseIRI ||
+      !req.body.options.format ||
+      !req.body.options.uriFormatBy
+    ) {
+      res.status(400).send({
+        status: 400,
+        message: 'Malformed request',
+      });
+      return;
+    }
+
+    const model = req.body.model;
+    const options = req.body.options;
+
     try {
-      const model = req.body.model;
-      const options = req.body.options;
-
       modelManager = new ModelManager(model);
+    } catch (deserializationError) {
+      let status: number = 500;
+      let message: string;
+      let errors: any;
 
+      if (deserializationError.message === 'Invalid model input.') {
+        status = 400;
+        message = deserializationError.message;
+        errors = deserializationError.errors;
+      } else {
+        status = 500;
+        message = 'Model manipulation error';
+        errors = deserializationError;
+      }
+
+      res.status(status);
+      res.json({
+        status: status,
+        message: message,
+        errors: errors,
+      });
+      return;
+    }
+
+    try {
       verification = new OntoUML2Verification(modelManager);
       const issues: VerificationIssue[] = await verification.run();
+      const errorIssues: VerificationIssue[] = issues
+        ? issues.filter(
+            (issue: VerificationIssue) => issue.severity === 'ERROR',
+          )
+        : [];
 
+      if (errorIssues.length > 0) {
+        res.status(400);
+        res.json({
+          status: 400,
+          message: 'Unable to transform model containing errors',
+          errors: JSON.parse(JSON.stringify(errorIssues, replacer)),
+        });
+        return;
+      }
+    } catch (verificationError) {
+      let status: number = 500;
+      let message: string = 'Verification step error';
+      let errors: any = verificationError;
+
+      res.status(status);
+      res.json({
+        status: status,
+        message: message,
+        errors: errors,
+      });
+      return;
+    }
+
+    try {
       service = new OntoUML2GUFO(modelManager);
       const output = await service.transformOntoUML2GUFO(options);
 
@@ -101,18 +192,18 @@ router.post(
         res.type('text');
       }
       res.send(output);
-    } catch (exception) {
-      if (exception.message === 'Invalid model input.') {
-        res.status(400);
-        res.json({
-          status: '400',
-          message: exception.message,
-          errors: exception.errors,
-        });
-      } else {
-        res.status(500).send();
-        console.trace(exception);
-      }
+    } catch (transformationError) {
+      let status: number = 500;
+      let message: string = 'Transformation step error';
+      let errors: any = transformationError;
+
+      res.status(status);
+      res.json({
+        status: status,
+        message: message,
+        errors: errors,
+      });
+      return;
     }
   },
 );
