@@ -23,21 +23,23 @@ router.post(
     let issuesString: string;
 
     try {
-      modelManager = new ModelManager(req.body);
+      modelManager = await new ModelManager(req.body);
     } catch (deserializationError) {
+      console.log(deserializationError);
+
       let status: number = 500;
       let message: string;
       let errors: any;
 
-      if (deserializationError.message === 'Invalid model input.') {
-        status = 400;
-        message = deserializationError.message;
-        errors = deserializationError.errors;
-      } else {
-        status = 500;
-        message = 'Model manipulation error';
-        errors = deserializationError;
-      }
+      // if (deserializationError.message === 'Invalid model input.') {
+      //   status = 400;
+      //   message = deserializationError.message;
+      //   errors = deserializationError.errors;
+      // } else {
+      // }
+      status = 500;
+      message = 'Model manipulation error';
+      errors = deserializationError;
 
       res.status(status);
       res.json({
@@ -101,23 +103,26 @@ router.post(
     let verification: OntoUML2Verification;
     let service: OntoUML2GUFO;
 
+    const body = req.body;
+
     if (
-      !req.body ||
-      !req.body.model ||
-      !req.body.options ||
-      !req.body.options.baseIRI ||
-      !req.body.options.format ||
-      !req.body.options.uriFormatBy
+      !body ||
+      !body.model ||
+      !body.options ||
+      !body.options.baseIRI ||
+      !body.options.format ||
+      !body.options.uriFormatBy
     ) {
       res.status(400).send({
         status: 400,
         message: 'Malformed request',
+        error: body
       });
       return;
     }
 
-    const model = req.body.model;
-    const options = req.body.options;
+    const model = body.model;
+    const options = body.options;
 
     try {
       modelManager = new ModelManager(model);
@@ -179,7 +184,9 @@ router.post(
 
     try {
       service = new OntoUML2GUFO(modelManager);
+      console.log(service);
       const output = await service.transformOntoUML2GUFO(options);
+      console.log(output);
 
       res.status(200);
       if (options.format === 'N-Triples') {
@@ -201,7 +208,7 @@ router.post(
       res.json({
         status: status,
         message: message,
-        errors: errors,
+        errors: transformationError,
       });
       return;
     }
