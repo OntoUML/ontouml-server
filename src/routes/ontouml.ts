@@ -26,20 +26,19 @@ router.post(
       modelManager = await new ModelManager(req.body);
     } catch (deserializationError) {
       console.log(deserializationError);
-
       let status: number = 500;
       let message: string;
       let errors: any;
 
-      // if (deserializationError.message === 'Invalid model input.') {
-      //   status = 400;
-      //   message = deserializationError.message;
-      //   errors = deserializationError.errors;
-      // } else {
-      // }
-      status = 500;
-      message = 'Model manipulation error';
-      errors = deserializationError;
+      if (deserializationError.message === 'Invalid model input.') {
+        status = 400;
+        message = deserializationError.message;
+        errors = deserializationError.errors;
+      } else {
+        status = 500;
+        message = 'Model manipulation error';
+        errors = deserializationError;
+      }
 
       res.status(status);
       res.json({
@@ -55,6 +54,8 @@ router.post(
       issues = await verification.run();
       issues = JSON.parse(JSON.stringify(issues, replacer));
     } catch (verificationError) {
+      console.log(verificationError);
+
       let status: number = 500;
       let message: string = 'Model verification error';
       let errors: any = verificationError;
@@ -77,6 +78,8 @@ router.post(
         res.json([]);
       }
     } catch (responseError) {
+      console.log(responseError);
+
       let status: number = 500;
       let message: string = 'Response error';
       let errors: any = responseError;
@@ -127,6 +130,8 @@ router.post(
     try {
       modelManager = new ModelManager(model);
     } catch (deserializationError) {
+      console.log(deserializationError);
+
       let status: number = 500;
       let message: string;
       let errors: any;
@@ -169,6 +174,8 @@ router.post(
         return;
       }
     } catch (verificationError) {
+      console.log(verificationError);
+
       let status: number = 500;
       let message: string = 'Verification step error';
       let errors: any = verificationError;
@@ -184,9 +191,7 @@ router.post(
 
     try {
       service = new OntoUML2GUFO(modelManager);
-      console.log(service);
       const output = await service.transformOntoUML2GUFO(options);
-      console.log(output);
 
       res.status(200);
       if (options.format === 'N-Triples') {
@@ -200,6 +205,8 @@ router.post(
       }
       res.send(output);
     } catch (transformationError) {
+      console.log(transformationError);
+
       let status: number = 500;
       let message: string = 'Transformation step error';
       let errors: any = transformationError;
@@ -241,7 +248,7 @@ function replacer(key, value) {
       case 'Generalization':
         break;
       case 'GeneralizationSet':
-        // contentsFields = ['generalizations'];
+        contentsFields = ['generalizations'];
         break;
     }
 

@@ -17,6 +17,8 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && 'body' in err) {
+    console.log(err);
+    
     return res.status(400).send({
       status: 400,
       error: err,
