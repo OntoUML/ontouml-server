@@ -5,7 +5,7 @@ import {
   OntoUML2Verification,
   OntoUML2GUFO,
   VerificationIssue,
-  IssueSeverity
+  IssueSeverity,
 } from 'ontouml-js';
 // import BadRequestError from '@error/bad_request';
 
@@ -148,9 +148,10 @@ router.post('/transform/gufo', async (
     verification = new OntoUML2Verification(modelManager);
     const issues: VerificationIssue[] = await verification.run();
     const errorIssues: VerificationIssue[] = issues
-      ? issues.filter((issue: VerificationIssue) => issue.severity === IssueSeverity.error)
+      ? issues.filter(
+          (issue: VerificationIssue) => issue.severity === IssueSeverity.error,
+        )
       : [];
-
     if (errorIssues.length > 0) {
       res.status(400);
       res.json({
@@ -190,7 +191,7 @@ router.post('/transform/gufo', async (
     } else {
       res.type('text');
     }
-    res.send(output);
+    res.send(output.model);
   } catch (transformationError) {
     console.log(transformationError);
 
