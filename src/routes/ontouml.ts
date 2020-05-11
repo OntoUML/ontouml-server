@@ -5,6 +5,7 @@ import {
   OntoUML2Verification,
   OntoUML2GUFO,
   VerificationIssue,
+  IssueSeverity
 } from 'ontouml-js';
 // import BadRequestError from '@error/bad_request';
 
@@ -103,14 +104,7 @@ router.post('/transform/gufo', async (
 
   const body = req.body;
 
-  if (
-    !body ||
-    !body.model ||
-    !body.options ||
-    !body.options.baseIRI ||
-    !body.options.format ||
-    !body.options.uriFormatBy
-  ) {
+  if (!body || !body.model || !body.options) {
     res.status(400).send({
       status: 400,
       message: 'Malformed request',
@@ -154,7 +148,7 @@ router.post('/transform/gufo', async (
     verification = new OntoUML2Verification(modelManager);
     const issues: VerificationIssue[] = await verification.run();
     const errorIssues: VerificationIssue[] = issues
-      ? issues.filter((issue: VerificationIssue) => issue.severity === 'ERROR')
+      ? issues.filter((issue: VerificationIssue) => issue.severity === IssueSeverity.error)
       : [];
 
     if (errorIssues.length > 0) {
