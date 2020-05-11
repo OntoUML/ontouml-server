@@ -14,11 +14,11 @@ const port = process.env.PORT || 3000;
 
 app.set('json spaces', 2);
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use((err, req, res, next) => {
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use((err, _req, res, next) => {
   if (err instanceof SyntaxError && 'body' in err) {
     console.log(err);
-    
+
     return res.status(400).send({
       status: 400,
       error: err,
@@ -33,7 +33,6 @@ app.use(API_VERSION, ontoumlRoutes);
 app.use(notFoundRouter);
 app.use(errorRouter);
 
-// app.listen(port);
 http.createServer(app).listen(port);
 
 console.log(`API is running on port ${port}`);
