@@ -23,9 +23,6 @@
     "docs": "node_modules/.bin/apidoc -i api/routes/ -o ./docs/",
     "pre-push": "npm run lint && npm test"
   },
-  "apidoc": {
-    "url": "https://api.ontouml.org/v1"
-  },
   "_moduleAliases": {
     "@configs": "src/configs",
     "@error": "src/error",

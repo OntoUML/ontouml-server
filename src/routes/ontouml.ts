@@ -3,7 +3,7 @@ import express from 'express';
 import {
   ModelManager,
   OntoUML2Verification,
-  OntoUML2GUFO,
+  Ontouml2Gufo,
   VerificationIssue,
   IssueSeverity,
 } from 'ontouml-js';
@@ -100,7 +100,7 @@ router.post('/transform/gufo', async (
 ) => {
   let modelManager: ModelManager;
   let verification: OntoUML2Verification;
-  let service: OntoUML2GUFO;
+  let service: Ontouml2Gufo;
 
   const body = req.body;
 
@@ -178,8 +178,9 @@ router.post('/transform/gufo', async (
   }
 
   try {
-    service = new OntoUML2GUFO(modelManager);
-    const output = await service.transformOntoUML2GUFO(options);
+    service = new Ontouml2Gufo(modelManager,options);
+    service.transform();
+    let owlCode = service.getOwlCode();
 
     res.status(200);
     if (options.format === 'N-Triples') {
@@ -191,7 +192,7 @@ router.post('/transform/gufo', async (
     } else {
       res.type('text');
     }
-    res.send(output.model);
+    res.send(owlCode);
   } catch (transformationError) {
     console.log(transformationError);
 
