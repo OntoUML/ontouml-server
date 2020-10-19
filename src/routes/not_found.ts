@@ -9,8 +9,7 @@ export default function(
   if (!req.app.locals.error) {
     const error = new NotFoundError({
       status: 404,
-      title: 'Not found',
-      detail: 'Route not found',
+      message: 'Not found',
     });
 
     req.app.locals.error = error;
