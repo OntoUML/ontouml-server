@@ -1,5 +1,5 @@
 # Base Dokcer image for Node.js
-FROM node:10
+FROM node:14
 
 # Working directory
 WORKDIR /src/
@@ -14,7 +14,7 @@ COPY . .
 RUN npm run-script build
 
 # Exposes the services on the specified port
-EXPOSE "${ONTOUML_SERVER_PORT}"
+EXPOSE "${PORT}"
 
 # Initiates the server
 CMD [ "npm", "start" ]

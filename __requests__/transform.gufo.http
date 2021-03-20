@@ -1,4 +1,5 @@
-POST http://localhost:3000/v1/transform/gufo
+# POST http://localhost:3000/v1/transform/gufo
+POST http://api.ontouml.org:3001/v1/transform/gufo
 content-type: application/json
 
 {

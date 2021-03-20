@@ -71,6 +71,7 @@ export function unableToProcessProjectWithErrorsResponse(
   const errorId = uniqid();
   console.error(`${errorId} - Unable to process project containing syntactical errors`);
   console.error(verificationOutput.result);
+  console.log(`------------------------------------`);
 
   response.status(400).json({
     id: errorId,
@@ -83,4 +84,11 @@ export function unableToProcessProjectWithErrorsResponse(
 export function performVerification(project: Project, options: any): any {
   const service = new OntoumlVerification(project, options);
   return service.run();
+}
+
+export function logRequestConcluded(statusCode) {
+  console.log(
+    `[${new Date().toISOString()}] - Request concluded${typeof statusCode === 'number' ? ' with status code ' + statusCode : ''}`,
+  );
+  console.log(`------------------------------------`);
 }

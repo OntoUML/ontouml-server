@@ -7,6 +7,7 @@ import {
   containSyntacticalErrors,
   unableToProcessProjectWithErrorsResponse,
   performVerification,
+  logRequestConcluded,
 } from './utils';
 import { Project, Ontouml2Gufo } from 'ontouml-js';
 
@@ -20,8 +21,10 @@ export default async function(request: express.Request, response: express.Respon
     if (containSyntacticalErrors(output)) {
       unableToProcessProjectWithErrorsResponse(request, response, output);
     } else {
+      const statusCode = 200;
       output = performTransformation(project, options);
-      response.status(200).json(output);
+      response.status(statusCode).json(output);
+      logRequestConcluded(statusCode);
     }
   } catch (error) {
     if (error instanceof ParseError) {
@@ -42,7 +45,7 @@ function logTransformationRequest(request: express.Request): void {
   console.log(`[${new Date().toISOString()}] - Processing transformation to gUFO request`);
   console.log(`\tIP: ${request.ip}`);
   console.log(`\tProject ID: ${request.body.project ? request.body.project.id : 'Unavailable'}`);
-  console.log(`\tOptions: ${request.body.options ? request.body.options : 'None'}`);
+  console.log(`\tOptions: ${request.body.options ? JSON.stringify(request.body.options) : 'None'}`);
 }
 
 function unexpectedTransformationErrorResponse(_request: express.Request, response: express.Response, error: any): void {
@@ -56,6 +59,7 @@ function unexpectedTransformationErrorResponse(_request: express.Request, respon
   console.error(`${errorId} - An unexpected error occurred during model transformation`);
   console.error(error.stack);
   console.error(responseBody);
+  console.log(`------------------------------------`);
 
   response.status(500).json(responseBody);
 }

@@ -7,6 +7,7 @@ import {
   containSyntacticalErrors,
   unableToProcessProjectWithErrorsResponse,
   performVerification,
+  logRequestConcluded,
 } from './utils';
 import { Project, Modularizer } from 'ontouml-js';
 
@@ -20,8 +21,10 @@ export default async function(request: express.Request, response: express.Respon
     if (containSyntacticalErrors(output)) {
       unableToProcessProjectWithErrorsResponse(request, response, output);
     } else {
+      const statusCode = 200;
       output = performModularization(project, options);
-      response.status(200).json(output);
+      response.status(statusCode).json(output);
+      logRequestConcluded(statusCode);
     }
   } catch (error) {
     if (error instanceof ParseError) {
@@ -56,6 +59,7 @@ function unexpectedTransformationErrorResponse(_request: express.Request, respon
   console.error(`${errorId} - An unexpected error occurred during modularization`);
   console.error(error.stack);
   console.error(responseBody);
+  console.log(`------------------------------------`);
 
   response.status(500).json(responseBody);
 }

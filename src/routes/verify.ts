@@ -1,6 +1,6 @@
 import express from 'express';
 import uniqid from 'uniqid';
-import { parseRequestBody, performVerification, ParseError, parseErrorResponse } from './utils';
+import { parseRequestBody, performVerification, ParseError, parseErrorResponse, logRequestConcluded } from './utils';
 
 export default async function(request: express.Request, response: express.Response, _next: express.NextFunction) {
   try {
@@ -8,7 +8,10 @@ export default async function(request: express.Request, response: express.Respon
 
     const { project, options } = parseRequestBody(request);
     const output = performVerification(project, options);
-    response.status(200).json(output);
+
+    const statusCode = 200;
+    response.status(statusCode).json(output);
+    logRequestConcluded(statusCode);
   } catch (error) {
     if (error instanceof ParseError) {
       parseErrorResponse(request, response, error);
@@ -37,6 +40,7 @@ function unexpectedVerificationErrorResponse(_request: express.Request, response
   console.error(`${errorId} - An unexpected error occurred during model verification`);
   console.error(error.stack);
   console.error(responseBody);
+  console.log(`------------------------------------`);
 
   response.status(500).json(responseBody);
 }

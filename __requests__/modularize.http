@@ -1,4 +1,6 @@
-POST http://localhost:3000/v1/modularize
+# POST http://localhost:3000/v1/modularize
+# POST http://99.81.142.192:3000/v1/modularize
+POST http://api.ontouml.org:3001/v1/modularize
 content-type: application/json
 
 {

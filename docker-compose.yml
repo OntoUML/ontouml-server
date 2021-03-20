@@ -2,9 +2,9 @@
 version: "2"
 services:
   ontouml-server:
-    container_name: ontouml-server
     env_file: .env
+    container_name: "ontouml-server-${SERVER_NAME}"
     build: .
     restart: always
     ports:
-      - "${ONTOUML_SERVER_PORT}:${ONTOUML_SERVER_PORT}"
+      - "${PORT}:${PORT}"
