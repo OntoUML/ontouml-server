@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "description": "Javascript library utility for manipulating OntoUML models.",
   "license": "Apache-2.0",
-  "engines": {
-    "node": "10.x"
-  },
+  "repository": "github:OntoUML/ontouml-server",
   "main": "build/src/index.js",
   "scripts": {
     "start": "node dist/index.js",
@@ -30,30 +28,30 @@
     "@utils": "src/utils"
   },
   "dependencies": {
-    "@babel/runtime": "^7.9.6",
-    "@types/express": "^4.17.6",
+    "@babel/runtime": "^7.13.7",
+    "@types/express": "^4.17.11",
     "body-parser": "^1.19.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "memoizee": "^0.4.14",
+    "memoizee": "^0.4.15",
     "nodemon": "^1.19.4",
-    "ontouml-js": "^0.2.0",
-    "regenerator-runtime": "^0.13.5",
+    "ontouml-js": "^0.4.0",
+    "regenerator-runtime": "^0.13.7",
     "tslib": "~1.10.0",
-    "uniqid": "^5.2.0"
+    "uniqid": "^5.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.9.6",
-    "@babel/plugin-transform-runtime": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/preset-typescript": "^7.9.0",
-    "@babel/register": "^7.9.0",
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.13.1",
+    "@babel/plugin-transform-runtime": "^7.13.7",
+    "@babel/preset-env": "^7.13.5",
+    "@babel/preset-typescript": "^7.13.0",
+    "@babel/register": "^7.13.0",
     "@types/jest": "^24.9.1",
-    "@types/node": "^10.17.21",
+    "@types/node": "^10.17.54",
     "apidoc": "^0.19.1",
     "babel-jest": "^24.9.0",
-    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-module-resolver": "^4.1.0",
     "dotenv": "^8.2.0",
     "grpc_tools_node_protoc_ts": "^2.5.11",
     "husky": "^3.1.0",
@@ -64,10 +62,11 @@
     "prettier": "~1.18.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^24.3.0",
+    "ts-node": "^9.1.1",
     "tslint": "~5.19.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-microsoft-contrib": "~6.2.0",
     "tsutils": "~3.17.0",
-    "typescript": "^3.6.5"
+    "typescript": "^4.2.2"
   }
 }

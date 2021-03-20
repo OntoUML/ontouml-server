@@ -1,7 +1,9 @@
 import express from 'express';
-import ontoumlRoutes from '@routes/ontouml';
 import notFoundRouter from '@routes/not_found';
 import errorRouter from '@routes/error';
+import verifyRouter from '@routes/verify';
+import modularizeRouter from '@routes/modularize';
+import transformGufoRouter from '@routes/transform.gufo';
 import { API_VERSION } from '@configs/index';
 import http from 'http';
 import bodyParser from 'body-parser';
@@ -10,7 +12,6 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-// const port = 80;
 
 app.set('json spaces', 2);
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -21,15 +22,16 @@ app.use((err, _req, res, next) => {
 
     return res.status(400).send({
       status: 400,
-      error: err,
+      // error: err,
     });
   }
 
   next();
 });
 
-app.use(API_VERSION, ontoumlRoutes);
-
+app.use(`${API_VERSION}/verify`, verifyRouter);
+app.use(`${API_VERSION}/transform/gufo`, transformGufoRouter);
+app.use(`${API_VERSION}/modularize`, modularizeRouter);
 app.use(notFoundRouter);
 app.use(errorRouter);
 
