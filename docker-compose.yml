@@ -3,8 +3,9 @@ version: "2"
 services:
   ontouml-server:
     env_file: .env
-    container_name: "ontouml-server-${SERVER_NAME}"
     build: .
+    image: "ontouml-server-${SERVER_NAME}"
+    container_name: "ontouml-server-${SERVER_NAME}"
     restart: always
     ports:
       - "${PORT}:${PORT}"

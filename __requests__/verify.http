@@ -1991,7 +1991,9 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3001/v1/verify
+# POST http://localhost:3001/v1/verify
+# POST http://api.ontouml.org/v1/verify
+POST http://api.ontouml.org:3000/v1/verify
 content-type: application/json
 
 {
@@ -2008,7 +2010,7 @@ content-type: application/json
             "type" : "Package",
             "propertyAssignments" : null,
             "contents" : [ {
-            "id" : "mNir2.6GAqACHQWX",
+            "id" : "mNir2.6GAqACHQWX_",
             "name" : "Class",
             "description" : null,
             "type" : "Class",
@@ -2016,7 +2018,7 @@ content-type: application/json
             "stereotype" : "kind",
             "isAbstract" : false,
             "isDerived" : false,
-            "properties" : 5,
+            "properties" : null,
             "isExtensional" : null,
             "isPowertype" : null,
             "order" : null,
@@ -2028,7 +2030,7 @@ content-type: application/json
             "description" : null,
             "type" : "Class",
             "propertyAssignments" : null,
-            "stereotype" : "category",
+            "stereotype" : "subkind",
             "isAbstract" : false,
             "isDerived" : false,
             "properties" : null,
@@ -2227,7 +2229,8 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3000/v1/verify
+# POST http://localhost:80/v1/verify
+POST http://api.ontouml.org:3000/v1/verify
 content-type: application/json
 
 {
@@ -2239,5 +2242,70 @@ content-type: application/json
         "type" : "Project",
         "model" : null,
         "diagrams" : null
+    }
+}
+
+###
+
+# POST http://localhost:80/v1/verify
+POST http://localhost/v1/verify
+content-type: application/json
+
+{
+    "options": null,
+    "project": {
+      "id" : "IJAtsh6GAqACHQi.",
+      "name" : "untitled",
+      "description" : null,
+      "type" : "Project",
+      "model" : {
+        "id" : "IJAtsh6GAqACHQi._root",
+        "name" : "untitled",
+        "description" : null,
+        "type" : "Package",
+        "propertyAssignments" : null,
+        "contents" : [ {
+          "id" : "6yItsh6GAqACHQyk",
+          "name" : "Class",
+          "description" : null,
+          "type" : "Class",
+          "propertyAssignments" : null,
+          "stereotype" : "type",
+          "isAbstract" : false,
+          "isDerived" : false,
+          "properties" : null,
+          "isExtensional" : null,
+          "isPowertype" : false,
+          "order" : 2,
+          "literals" : null,
+          "restrictedTo" : [ "type" ]
+        } ]
+      },
+      "diagrams" : [ {
+        "id" : "_twtsh6GAqACHQyZ",
+        "name" : "Class Diagram1",
+        "description" : null,
+        "type" : "Diagram",
+        "owner" : {
+          "id" : "IJAtsh6GAqACHQi._root",
+          "type" : "Package"
+        },
+        "contents" : [ {
+          "id" : "6yItsh6GAqACHQyj",
+          "type" : "ClassView",
+          "modelElement" : {
+            "id" : "6yItsh6GAqACHQyk",
+            "type" : "Class"
+          },
+          "shape" : {
+            "id" : "6yItsh6GAqACHQyj_shape",
+            "type" : "Rectangle",
+            "x" : 131,
+            "y" : 73,
+            "width" : 80,
+            "height" : 40
+          }
+        } ]
+      } ]
     }
 }
