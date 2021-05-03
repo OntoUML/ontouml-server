@@ -1,9 +1,9 @@
-POST http://localhost:80/v1/transform/db
-# POST http://api.ontouml.org:3001/v1/transform/db
+POST http://localhost:80/v1/transform/gufo
+# POST http://api.ontouml.org:3001/v1/transform/gufo
 content-type: application/json
 
 {
-    "options": { "enumFieldToLookupTable": true },
+    "options": null,
     "project": {
         "id" : "Pz4r2.6GAqACHQBO",
         "name" : "untitled",
