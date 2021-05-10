@@ -37,7 +37,7 @@
     "express": "^4.17.1",
     "memoizee": "^0.4.15",
     "nodemon": "^1.19.4",
-    "ontouml-js": "file:../ontouml-js/ontouml-js-0.4.1.tgz",
+    "ontouml-js": "^0.5.0",
     "regenerator-runtime": "^0.13.7",
     "tslib": "~1.10.0",
     "uniqid": "^5.3.0"
@@ -55,7 +55,6 @@
     "babel-jest": "^24.9.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "dotenv": "^8.2.0",
-    "grpc_tools_node_protoc_ts": "^2.5.11",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
     "module-alias": "^2.2.2",
